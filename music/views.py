@@ -48,7 +48,9 @@ class SaveImage(generics.CreateAPIView):
                 print("No GPS coordinates found.")
 
             
-        return Response(serializer.data,status=status.HTTP_200_OK) 
+        response = HttpResponse(b.merge_music.read(), content_type="audio/mpeg")
+        response["Content-Disposition"] = f'attachment; filename="music.mp3"'
+        return response
     
 
 
@@ -61,7 +63,7 @@ class DownloadMusic(generics.RetrieveAPIView):
         data = MusicImage.objects.get(id = request_id)
 
         response = HttpResponse(data.merge_music.read(), content_type="audio/mpeg")
-        response["Content-Disposition"] = f'attachment; filename="music.mp3"'
+        response['Content-Disposition'] = 'inline; filename="music.mp3"'
         return response
 
 
